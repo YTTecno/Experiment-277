@@ -1,0 +1,11 @@
+{
+  "music.menu": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "experiment_277:music/menu_music",
+        "stream": true
+      }
+    ]
+  }
+}
