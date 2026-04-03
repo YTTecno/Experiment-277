@@ -129,7 +129,6 @@ public class ClientEvents {
                     if (sanityTicks >= 8000) {
                         insanityLevel++;
                         sanityTicks = 0;
-                        mc.player.displayClientMessage(Component.literal("§7[Debug] Sanity Level: " + (MAX_INSANITY - insanityLevel)), true);
                     }
                 }
 
