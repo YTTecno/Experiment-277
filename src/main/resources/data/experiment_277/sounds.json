@@ -1,0 +1,14 @@
+{
+  "crasher_chase": {
+    "category": "hostile",
+    "sounds": [
+      "experiment_277:crasher_chase"
+    ]
+  },
+  "stalker_vanish": {
+    "category": "ambient",
+    "sounds": [
+      "experiment_277:place_holder"
+    ]
+  }
+}

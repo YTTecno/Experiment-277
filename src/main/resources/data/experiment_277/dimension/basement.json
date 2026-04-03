@@ -1,0 +1,15 @@
+{
+  "type": "experiment_277:basement",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        { "block": "minecraft:bedrock", "height": 1 },
+        { "block": "minecraft:cobblestone", "height": 30 },
+        { "block": "minecraft:cobblestone", "height": 1 }
+      ],
+      "biome": "experiment_277:basement_biome",
+      "features": false
+    }
+  }
+}

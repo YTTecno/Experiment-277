@@ -18,8 +18,6 @@ public class MovementHandler {
                 player.setSprinting(false);
             }
 
-            // This ensures they move at the classic 1.0 "Heavy" speed
-            // 0.1D is the default walking speed.
             var speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
             if (speedAttr != null && speedAttr.getBaseValue() > 0.1D) {
                 speedAttr.setBaseValue(0.1D);

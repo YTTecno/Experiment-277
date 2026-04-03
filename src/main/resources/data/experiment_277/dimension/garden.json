@@ -1,0 +1,29 @@
+{
+  "type": "experiment_277:garden",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "experiment_277:garden_biome",
+      "features": false,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "minecraft:dirt",
+          "height": 30
+        },
+        {
+          "block": "minecraft:grass_block",
+          "height": 1
+        },
+        {
+          "block": "minecraft:poppy",
+          "height": 1
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

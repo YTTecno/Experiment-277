@@ -7,5 +7,14 @@
         "stream": true
       }
     ]
+  },
+  "crasher_chase": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "experiment_277:sounds/crasher_chase",
+        "stream": true
+      }
+    ]
   }
 }
