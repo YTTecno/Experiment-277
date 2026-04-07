@@ -21,7 +21,7 @@ public class stalker {
 
         if (entity == null) {
             // Spawn logic: Try to spawn every tick if insanity is met
-            if (insanity >= 1 && RANDOM.nextInt(7000) == 0) {
+            if (insanity >= 1 && RANDOM.nextInt(8000) == 0) {
                 spawn(mc);
             }
         } else {

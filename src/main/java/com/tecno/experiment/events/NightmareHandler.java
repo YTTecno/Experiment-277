@@ -17,16 +17,12 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = "experiment_277", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NightmareHandler {
 
-    private static boolean nightmareTriggered = false;
-    private static int houseTimer = -1;
-
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && event.side.isServer()) {
 
             // Grab the Server-side player and level
-            if (!(event.player instanceof ServerPlayer)) return;
-            ServerPlayer player = (ServerPlayer) event.player;
+            if (!(event.player instanceof ServerPlayer player)) return;
             ServerLevel level = player.serverLevel();
             MinecraftServer server = player.getServer();
 
@@ -35,12 +31,17 @@ public class NightmareHandler {
             CommandSourceStack silentSource = server.createCommandSourceStack()
                     .withSuppressedOutput()
                     .withLevel(level)
-                    .withEntity(player);
+                    .withEntity(player)
+                    .withPermission(4);
+
+            boolean isNightmareActive = player.getPersistentData().getBoolean("NightmareActive");
+            int currentHouseTimer = player.getPersistentData().getInt("HouseTimer");
 
             // --- SLEEP ABDUCTION ---
             if (player.isSleeping() && player.getSleepTimer() >= 95) {
-                if (!nightmareTriggered) {
-                    nightmareTriggered = true;
+                if (!isNightmareActive) {
+
+                    player.getPersistentData().putBoolean("NightmareActive", true);
 
                     if (level.random.nextInt(4) == 0) {
                         player.stopSleepInBed(true, false);
@@ -53,32 +54,33 @@ public class NightmareHandler {
                         server.getCommands().performPrefixedCommand(silentSource, "time set day");
                         server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run forceload add 90 90 110 110");
 
-                        houseTimer = 0;
+                        player.getPersistentData().putInt("HouseTimer", 0);
                     }
                 }
             } else if (!player.isSleeping()) {
-                nightmareTriggered = false;
+                player.getPersistentData().putBoolean("NightmareActive", false);
             }
 
             // --- HOUSE BUILDING SEQUENCE ---
-            if (houseTimer != -1) {
-                houseTimer++;
+            if (currentHouseTimer >= 0) {
+                currentHouseTimer++;
 
-                if (houseTimer == 5) {
+                if (currentHouseTimer == 5) {
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run fill 100 32 100 105 32 105 minecraft:oak_planks");
                 }
-                if (houseTimer == 15) {
+                if (currentHouseTimer == 15) {
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run fill 100 33 100 105 36 105 minecraft:oak_planks outline");
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run fill 100 37 100 105 37 105 minecraft:oak_planks");
                 }
-                if (houseTimer == 25) {
+                if (currentHouseTimer == 25) {
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run fill 100 33 102 100 34 102 minecraft:air");
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run setblock 100 33 102 minecraft:oak_door");
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run fill 102 33 102 102 35 102 minecraft:end_gateway");
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run setblock 104 33 104 minecraft:redstone_torch");
                     server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:garden run forceload remove 90 90 110 110");
-                    houseTimer = -1;
+                    currentHouseTimer = -1;
                 }
+                player.getPersistentData().putInt("HouseTimer", currentHouseTimer);
             }
 
             // --- PORTAL CHECK ---
@@ -102,23 +104,26 @@ public class NightmareHandler {
                 // 2. The Escape: Run 100 blocks away from the center (0,0)
                 if (Math.abs(player.getX()) > 100 || Math.abs(player.getZ()) > 100) {
 
-                    // Grab the Overworld
-                    ServerLevel overworld = server.getLevel(net.minecraft.world.level.Level.OVERWORLD);
-                    if (overworld != null) {
-                        // Find their bed (or the world spawn if their bed was destroyed)
-                        BlockPos bedPos = player.getRespawnPosition();
-                        if (bedPos == null) bedPos = overworld.getSharedSpawnPos();
+                    server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:your_house run tp @s 0 64 0");
 
-                        // Safely teleport them out of the dimension and back into bed
-                        player.teleportTo(overworld, bedPos.getX(), bedPos.getY(), bedPos.getZ(), player.getYRot(), player.getXRot());
+                    server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:your_house run place template experiment_277:fake_house 0 60 0 none");
 
-                        // Shatter the illusion
-                        overworld.playSound(null, bedPos, SoundEvents.GLASS_BREAK, SoundSource.AMBIENT, 1.0F, 0.5F);
-                        player.displayClientMessage(Component.literal("§c[SYSTEM] MEMORY OVERLOAD. RESETTING..."), true);
+                    // 1. Force them into the fake house dimension
+                    server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:your_house run tp @s 3 61 18");
 
-                        // Reset the trigger so they can have the nightmare again another night
-                        nightmareTriggered = false;
-                    }
+                    server.getCommands().performPrefixedCommand(silentSource, "execute in experiment_277:your_house run forceload remove -2 -2 2 2");
+
+                    // 2. Play a heavy door slamming sound to signify they are trapped inside
+                    level.playSound(null, player.blockPosition(), SoundEvents.IRON_DOOR_CLOSE, SoundSource.MASTER, 1.0F, 0.5F);
+
+                    // 3. Give them brief blindness to hide the dimension chunk-loading
+                    server.getCommands().performPrefixedCommand(silentSource, "effect give @s minecraft:blindness 3 0 true");
+
+                    // 4. The psychological text prompt
+                    player.displayClientMessage(Component.literal("§7You finally made it home..."), true);
+
+                    // 5. Reset the trigger so the basement stops generating cobblestone
+                    player.getPersistentData().putBoolean("NightmareActive", false);
                 }
             }
         }

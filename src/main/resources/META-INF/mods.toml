@@ -20,7 +20,7 @@ license="${mod_license}"
 # The modid of the mod
 modId="experiment_277" #mandatory
 # The version number of the mod
-version="1.0.0" #mandatory
+version="1.1" #mandatory
 # A display name for the mod
 displayName="Experiment_277" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
@@ -45,6 +45,13 @@ authors="Tecno" #optional
 description='''A slow burn psychological horror mod'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.experiment_277]] #optional
+modId="lucent"
+mandatory=false
+versionRange="[1.2.0,]"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.experiment_277]]
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified

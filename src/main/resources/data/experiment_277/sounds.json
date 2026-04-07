@@ -5,10 +5,16 @@
       "experiment_277:crasher_chase"
     ]
   },
-  "stalker_vanish": {
+  "the_voices": {
     "category": "ambient",
     "sounds": [
-      "experiment_277:place_holder"
+      "experiment_277:the_voices"
+    ]
+  },
+  "ringing": {
+    "catagory": "ambient",
+    "sounds": [
+      "experiment_277:ringing"
     ]
   }
 }

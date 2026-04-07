@@ -15,6 +15,12 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> STALKER_VANISH = registerSoundEvent("stalker_vanish");
 
+    public static final RegistryObject<SoundEvent> THE_VOICES = registerSoundEvent("the_voices");
+
+    public static final RegistryObject<SoundEvent> RINGING = registerSoundEvent("ringing");
+
+    public static final RegistryObject<SoundEvent> EXCUSE = registerSoundEvent("excuse");
+
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("experiment_277", name)));
     }

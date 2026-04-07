@@ -1,0 +1,15 @@
+{
+  "name": "experiment_277:garage_car_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "experiment_277:garage_car",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

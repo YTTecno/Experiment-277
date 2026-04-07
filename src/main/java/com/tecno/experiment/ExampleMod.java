@@ -21,11 +21,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-
-import static com.tecno.experiment.init.ModSounds.SOUND_EVENTS;
+import com.tecno.experiment.init.ModBlocks;
+import com.tecno.experiment.init.ModItems;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(ExampleMod.MODID)
 public class ExampleMod {
+
+    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
     public static final String MODID = "experiment_277";
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -33,9 +37,7 @@ public class ExampleMod {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
     public static final RegistryObject<Item> INTEGRITY_PILL = ITEMS.register("integrity_pill",
-            () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)) {
-
-                private int totalPillsConsumed = 0;
+            () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)) {
 
                 @Override
                 public UseAnim getUseAnimation(ItemStack stack) { return UseAnim.EAT; }
@@ -63,26 +65,33 @@ public class ExampleMod {
                             } else {
                                 player.displayClientMessage(Component.literal("§fIntegrity at nominal levels. No action required."), true);
                             }
-                        }
+                        } else {
+                            // Safe Server-Side NBT Logic
+                            int pillsTaken = player.getPersistentData().getInt("PillsConsumed");
+                            pillsTaken++;
+                            player.getPersistentData().putInt("PillsConsumed", pillsTaken);
 
-                        totalPillsConsumed++;
-                        if (totalPillsConsumed > 5) {
-                            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0));
-                            player.hurt(player.damageSources().magic(), 2.0F); // 1 heart damage
-                            player.displayClientMessage(Component.literal("§c[WARNING] Toxicity detected. Cease administration."), true);
+                            if (pillsTaken > 5) {
+                                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0));
+                                player.hurt(player.damageSources().magic(), 2.0F);
+                                player.displayClientMessage(Component.literal("§c[WARNING] Toxicity detected. Cease administration."), true);
+                            }
                         }
                     }
-                    // (Infinite use)
                     return stack;
                 }
             });
 
+    // --- THE CONSTRUCTOR ---
     public ExampleMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modEventBus);
         com.tecno.experiment.init.ModSounds.register(modEventBus);
         modEventBus.addListener(this::addCreative);
         MinecraftForge.EVENT_BUS.register(this);
+        com.tecno.experiment.init.ModItems.register(modEventBus);
+        com.tecno.experiment.init.ModBlocks.register(modEventBus);
+        com.tecno.experiment.init.ModEntities.register(modEventBus);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

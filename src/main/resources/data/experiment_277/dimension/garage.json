@@ -1,0 +1,25 @@
+{
+  "type": "experiment_277:garage",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "experiment_277:garage_biome",
+      "lakes": false,
+      "features": true,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "minecraft:stone",
+          "height": 120
+        },
+        {
+          "block": "minecraft:smooth_stone",
+          "height": 1
+        }
+        ]
+    }
+  }
+}

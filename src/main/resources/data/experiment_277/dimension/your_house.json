@@ -1,0 +1,17 @@
+{
+  "type": "experiment_277:your_house",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "experiment_277:house_biome",
+      "lakes": false,
+      "features": true,
+      "layers": [
+        {
+          "block": "minecraft:grass_block",
+          "height": 120
+        }
+      ]
+    }
+  }
+}

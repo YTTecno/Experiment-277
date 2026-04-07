@@ -1,4 +1,7 @@
 {
   "item.experiment_277.integrity_pill": "Препарат-Б",
-  "effect.minecraft.nausea": "Numb"
+  "effect.minecraft.nausea": "Numb",
+  "item.experiment_277.flashlight": "Flashlight",
+  "effect.minecraft.darkness": "Can't see",
+  "entity.experiment_277.hound": "Hound"
 }

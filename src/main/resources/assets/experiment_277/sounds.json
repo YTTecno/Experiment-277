@@ -16,5 +16,32 @@
         "stream": true
       }
     ]
+  },
+  "the_voices": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "experiment_277:sounds/the_voices",
+        "stream": true
+      }
+    ]
+  },
+  "ringing": {
+    "catagory": "ambient",
+    "sounds": [
+      {
+        "name": "experiment_277:sounds/ringing",
+        "stream": true
+      }
+    ]
+  },
+  "excuse": {
+    "catagory": "ambient",
+    "sounds": [
+      {
+        "name": "experiment_277:sounds/excuse",
+        "stream": true
+      }
+    ]
   }
 }

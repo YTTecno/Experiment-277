@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tecno.experiment.entity.crasher;
 import com.tecno.experiment.entity.stalker;
+import com.tecno.experiment.events.AnimalStare;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -41,8 +42,8 @@ public class ClientEvents {
     private static final ResourceLocation HORROR_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minecraft", "background.png");
     private static int flashTimer = 0;
     private static long sanityTicks = 0;
-    private static int insanityLevel = 0;
-    private static final int MAX_INSANITY = 5;
+    public static int insanityLevel = 0;
+    public static final int MAX_INSANITY = 5;
     private static void spawnCross(Minecraft mc, BlockPos pos) {
         Level level = mc.level;
         if (level == null) return;
@@ -72,9 +73,9 @@ public class ClientEvents {
         int displaySanity = MAX_INSANITY - insanityLevel;
         String text = "dementedness: " + displaySanity;
 
-        int color = 0x00FF00;
-        if (displaySanity <= 1) color = 0xFF0000;
-        else if (displaySanity <= 3) color = 0xFFFF00;
+        int color = 0xFFFFFF;
+        if (displaySanity <= 1) color = 0xFFFFFF;
+        else if (displaySanity <= 3) color = 0xFFFFFF;
 
         graphics.drawString(mc.font, text, 10, 10, color, true);
     }
@@ -86,6 +87,7 @@ public class ClientEvents {
             Minecraft mc = Minecraft.getInstance();
             stalker.tick(Minecraft.getInstance(), insanityLevel);
             crasher.tick(Minecraft.getInstance(), insanityLevel);
+            AnimalStare.tick(Minecraft.getInstance(), insanityLevel) ;
             // Inside the if (mc.level != null && !mc.isPaused() && !isTerminated) block:
 
             if (insanityLevel >= 3) { // Only start when Sanity is 2, 1, or 0
